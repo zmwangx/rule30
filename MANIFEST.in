@@ -1,0 +1,2 @@
+include COPYING README.rst requirements.txt
+include doc/conf.py doc/favicon.ico doc/requirements.txt doc/*.rst
