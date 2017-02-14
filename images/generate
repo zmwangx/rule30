@@ -1,0 +1,21 @@
+#!/usr/bin/env zsh
+
+here=$0:A:h
+for rule in {0..255}; do
+    filename=rule$rule.png
+    print "Generating $filename ..." >&2
+    rule30 --rule $rule --rows 256 $here/$filename
+done
+
+print "Generating combined.png ..." >&2
+
+tmpdir=$(mktemp -d -t rule30.XXXXXXX) || { print "Error: Failed to make tempdir" >&2; exit 1; }
+trap 'rm -rf $tmpdir' EXIT HUP INT PIPE ALRM TERM
+# Generate labels
+for rule in {0..255}; do
+    convert -font Courier -size 511x18 -pointsize 12 -gravity south label:"Rule $rule" $tmpdir/rule$rule-label.png
+done
+# Copy individual images
+print -l $here/rule{0..255}.png | parallel --xargs cp '{}' $tmpdir
+setopt numericglobsort
+print -l $tmpdir/rule*.png | convert @- -append $here/combined.png
