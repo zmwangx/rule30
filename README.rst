@@ -6,7 +6,7 @@
 
 This project efficiently implements Stephen Wolfram's elementary cellular automata (Rule 30 being a notable example), specifically their single 1 histories. Histories can be generated in various matrix formats (including ``numpy.ndarray``) and exported as strings or images.
 
-.. |Supported Python versions| image:: https://img.shields.io/badge/python-3.6-blue.svg?maxAge=2592000
+.. |Supported Python versions| image:: https://img.shields.io/badge/python-3.3,3.4,3.5,3.6-blue.svg?maxAge=2592000
 .. |Docs| image:: https://img.shields.io/badge/docs-latest-green.svg?maxAge=2592000
    :target: https://rule30.zhimingwang.org
 .. |License| image:: https://img.shields.io/badge/license-MIT-blue.svg?maxAge=2592000
