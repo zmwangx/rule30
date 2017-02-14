@@ -1,0 +1,436 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>rule30.automaton &mdash; rule30 0.1 documentation</title>
+  
+
+  
+  
+    <link rel="shortcut icon" href="../../_static/favicon.ico"/>
+  
+
+  
+
+  
+  
+    
+
+  
+
+  
+  
+    <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
+  
+
+  
+
+  
+        <link rel="index" title="Index"
+              href="../../genindex.html"/>
+        <link rel="search" title="Search" href="../../search.html"/>
+    <link rel="top" title="rule30 0.1 documentation" href="../../index.html"/>
+        <link rel="up" title="Module code" href="../index.html"/> 
+
+  
+  <script src="../../_static/js/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search">
+          
+
+          
+            <a href="../../index.html" class="icon icon-home"> rule30
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                0.1
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+                <ul>
+<li class="toctree-l1"><a class="reference internal" href="../../rule30.automaton.html"><code class="docutils literal"><span class="pre">rule30.automaton</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../rule30.visualize.html"><code class="docutils literal"><span class="pre">rule30.visualize</span></code></a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
+        <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+        <a href="../../index.html">rule30</a>
+      </nav>
+
+
+      
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+  <ul class="wy-breadcrumbs">
+    <li><a href="../../index.html">Docs</a> &raquo;</li>
+      
+          <li><a href="../index.html">Module code</a> &raquo;</li>
+      
+    <li>rule30.automaton</li>
+      <li class="wy-breadcrumbs-aside">
+        
+          
+        
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <h1>Source code for rule30.automaton</h1><div class="highlight"><pre>
+<span></span><span class="ch">#!/usr/bin/env python3</span>
+
+<span class="kn">import</span> <span class="nn">bitarray</span>
+
+<span class="kn">from</span> <span class="nn">.</span> <span class="k">import</span> <span class="n">visualize</span>
+
+<div class="viewcode-block" id="Automaton"><a class="viewcode-back" href="../../rule30.automaton.html#rule30.automaton.Automaton">[docs]</a><span class="k">class</span> <span class="nc">Automaton</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    An elementary cellular automaton with an initial state of a single 1.</span>
+
+<span class="sd">    The number of rows, `rows`, is given at class instantiation, and the</span>
+<span class="sd">    automaton is only simulated to that depth. Horizontally, we only</span>
+<span class="sd">    keep the states of the 2 * `rows` - 1 cells centered around the</span>
+<span class="sd">    initial 1.</span>
+
+<span class="sd">    One can access the history matrix via `matrix` or as a numpy array</span>
+<span class="sd">    via `nparray`, or as a printable string via `string`, or as an image</span>
+<span class="sd">    via `image`.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    rows : int</span>
+<span class="sd">    rule : int, optional</span>
+<span class="sd">        The Wolfram code for the rule (in the range [0, 255]). See</span>
+<span class="sd">        `Wolfram code &lt;https://en.wikipedia.org/wiki/Wolfram_code&gt;`_ on</span>
+<span class="sd">        Wikipedia. Default is 30.</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">rows</span><span class="p">,</span> <span class="n">rule</span><span class="o">=</span><span class="mi">30</span><span class="p">):</span>
+        <span class="k">if</span> <span class="n">rows</span> <span class="o">&lt;=</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;The number of rows should be positive.&quot;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_rows</span> <span class="o">=</span> <span class="n">rows</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_columns</span> <span class="o">=</span> <span class="n">rows</span> <span class="o">*</span> <span class="mi">2</span> <span class="o">-</span> <span class="mi">1</span>
+
+        <span class="k">if</span> <span class="ow">not</span> <span class="mi">0</span> <span class="o">&lt;=</span> <span class="n">rule</span> <span class="o">&lt;=</span> <span class="mi">255</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;The rule should be an integer in the range 0-255.&quot;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_rule</span> <span class="o">=</span> <span class="n">rule</span>
+        <span class="c1"># Unpack rule</span>
+        <span class="n">u</span> <span class="o">=</span> <span class="p">[</span><span class="n">bit</span> <span class="o">==</span> <span class="s1">&#39;1&#39;</span> <span class="k">for</span> <span class="n">bit</span> <span class="ow">in</span> <span class="nb">reversed</span><span class="p">(</span><span class="s1">&#39;</span><span class="si">{:08b}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">rule</span><span class="p">))]</span>
+        <span class="c1"># Wolfram code is big-endian in terms of the bit position of</span>
+        <span class="c1"># each of the 2^3=8 configurations (just like how we write</span>
+        <span class="c1"># numbers in a left-to-right system); we map the ruleset to</span>
+        <span class="c1"># little-endian form, so that, for instance, the rule for 110 is</span>
+        <span class="c1"># stored in 0b011.</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_rule_unpacked</span> <span class="o">=</span> <span class="p">[</span>
+            <span class="n">u</span><span class="p">[</span><span class="mb">0b000</span><span class="p">],</span>  <span class="c1"># 000</span>
+            <span class="n">u</span><span class="p">[</span><span class="mb">0b100</span><span class="p">],</span>  <span class="c1"># 001</span>
+            <span class="n">u</span><span class="p">[</span><span class="mb">0b010</span><span class="p">],</span>  <span class="c1"># 010</span>
+            <span class="n">u</span><span class="p">[</span><span class="mb">0b110</span><span class="p">],</span>  <span class="c1"># 011</span>
+            <span class="n">u</span><span class="p">[</span><span class="mb">0b001</span><span class="p">],</span>  <span class="c1"># 100</span>
+            <span class="n">u</span><span class="p">[</span><span class="mb">0b101</span><span class="p">],</span>  <span class="c1"># 101</span>
+            <span class="n">u</span><span class="p">[</span><span class="mb">0b011</span><span class="p">],</span>  <span class="c1"># 110</span>
+            <span class="n">u</span><span class="p">[</span><span class="mb">0b111</span><span class="p">],</span>  <span class="c1"># 111</span>
+        <span class="p">]</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">_matrix</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_generate</span><span class="p">()</span>
+
+    <span class="k">def</span> <span class="nf">__str__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">string</span><span class="p">()</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">rows</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Number of rows in the history matrix.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        int</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_rows</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">columns</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Number of columns in the history matrix.</span>
+
+<span class="sd">        Always equals 2 * `rows` - 1.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        int</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_columns</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">rule</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Wolfram code for the rule.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        int</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_rule</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">matrix</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;The history matrix.</span>
+
+<span class="sd">        This is a list of `rows` rows, where each row is a bitarray of</span>
+<span class="sd">        length `columns`. See `bitarray&#39;s reference</span>
+<span class="sd">        &lt;https://pypi.python.org/pypi/bitarray&gt;`_ for more details.</span>
+
+<span class="sd">        This is the internal representation of the `Automaton` class.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        List[bitarray]</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_matrix</span>
+
+<div class="viewcode-block" id="Automaton.string"><a class="viewcode-back" href="../../rule30.automaton.html#rule30.automaton.Automaton.string">[docs]</a>    <span class="k">def</span> <span class="nf">string</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">zero</span><span class="o">=</span><span class="s1">&#39;0&#39;</span><span class="p">,</span> <span class="n">one</span><span class="o">=</span><span class="s1">&#39;1&#39;</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Returns a printable string representation of the matrix.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        zero : str, optional</span>
+<span class="sd">            The character to print for a cell of value 0. Default is &#39;0&#39;.</span>
+<span class="sd">        one : str, optional</span>
+<span class="sd">            The character to print for a cell of value 1. Default is &#39;1&#39;.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        str</span>
+
+<span class="sd">        Examples</span>
+<span class="sd">        --------</span>
+<span class="sd">        &gt;&gt;&gt; import rule30</span>
+<span class="sd">        &gt;&gt;&gt; print(rule30.Automaton(5, rule=30).string())</span>
+<span class="sd">        000010000</span>
+<span class="sd">        000111000</span>
+<span class="sd">        001100100</span>
+<span class="sd">        011011110</span>
+<span class="sd">        110010001</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="s1">&#39;</span><span class="se">\n</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">join</span><span class="p">([</span><span class="s1">&#39;&#39;</span><span class="o">.</span><span class="n">join</span><span class="p">([</span><span class="n">one</span> <span class="k">if</span> <span class="n">bit</span> <span class="k">else</span> <span class="n">zero</span> <span class="k">for</span> <span class="n">bit</span> <span class="ow">in</span> <span class="n">row</span><span class="p">])</span>
+                          <span class="k">for</span> <span class="n">row</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_matrix</span><span class="p">])</span></div>
+
+<div class="viewcode-block" id="Automaton.nparray"><a class="viewcode-back" href="../../rule30.automaton.html#rule30.automaton.Automaton.nparray">[docs]</a>    <span class="k">def</span> <span class="nf">nparray</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Returns the matrix as a numpy array of dtype bool.</span>
+
+<span class="sd">        Requires numpy.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        numpy.ndarray</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="kn">import</span> <span class="nn">numpy</span>
+        <span class="n">rows</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_rows</span>
+        <span class="n">columns</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_columns</span>
+        <span class="n">matrix</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_matrix</span>
+        <span class="n">array</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">ndarray</span><span class="p">((</span><span class="n">rows</span><span class="p">,</span> <span class="n">columns</span><span class="p">),</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">bool</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">rows</span><span class="p">):</span>
+            <span class="n">buf</span> <span class="o">=</span> <span class="n">matrix</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">unpack</span><span class="p">(</span><span class="n">zero</span><span class="o">=</span><span class="sa">b</span><span class="s1">&#39;</span><span class="se">\x00</span><span class="s1">&#39;</span><span class="p">,</span> <span class="n">one</span><span class="o">=</span><span class="sa">b</span><span class="s1">&#39;</span><span class="se">\x01</span><span class="s1">&#39;</span><span class="p">)</span>
+            <span class="n">array</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">frombuffer</span><span class="p">(</span><span class="n">buf</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">bool</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">array</span></div>
+
+<div class="viewcode-block" id="Automaton.image"><a class="viewcode-back" href="../../rule30.automaton.html#rule30.automaton.Automaton.image">[docs]</a>    <span class="k">def</span> <span class="nf">image</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">block_size</span><span class="o">=</span><span class="mi">1</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Returns an image for the matrix.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        block_size : int, optional</span>
+<span class="sd">            Size in pixels of each cell (drawn as a square). Default is 1.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        PIL.Image.Image</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="n">visualize</span><span class="o">.</span><span class="n">image_from_matrix</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_matrix</span><span class="p">,</span> <span class="n">block_size</span><span class="o">=</span><span class="n">block_size</span><span class="p">)</span></div>
+
+    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">_zeros</span><span class="p">(</span><span class="n">length</span><span class="p">):</span>
+        <span class="c1"># Returns a zeroed little-endian bitarray of specified length</span>
+        <span class="n">buf</span> <span class="o">=</span> <span class="n">bitarray</span><span class="o">.</span><span class="n">bitarray</span><span class="p">(</span><span class="n">length</span><span class="p">,</span> <span class="n">endian</span><span class="o">=</span><span class="s1">&#39;little&#39;</span><span class="p">)</span>
+        <span class="n">buf</span><span class="o">.</span><span class="n">setall</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">buf</span>
+
+    <span class="k">def</span> <span class="nf">_generate</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">rule</span> <span class="o">%</span> <span class="mi">2</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_generate_even</span><span class="p">()</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_generate_odd</span><span class="p">()</span>
+
+    <span class="k">def</span> <span class="nf">_generate_even</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">rows</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_rows</span>
+        <span class="n">columns</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_columns</span>
+        <span class="n">rule_unpacked</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_rule_unpacked</span>
+
+        <span class="c1"># Initial state, with a single 1 in the middle</span>
+        <span class="n">row</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_zeros</span><span class="p">(</span><span class="n">columns</span><span class="p">)</span>
+        <span class="n">row</span><span class="p">[</span><span class="n">rows</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="mi">1</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_matrix</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">row</span><span class="p">)</span>
+
+        <span class="c1"># Evolution</span>
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">rows</span><span class="p">):</span>
+            <span class="n">lastrow</span> <span class="o">=</span> <span class="n">row</span>
+            <span class="n">row</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_zeros</span><span class="p">(</span><span class="n">columns</span><span class="p">)</span>
+            <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">max</span><span class="p">(</span><span class="n">rows</span><span class="o">-</span><span class="n">i</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">),</span> <span class="nb">max</span><span class="p">(</span><span class="n">rows</span><span class="o">+</span><span class="n">i</span><span class="p">,</span> <span class="n">columns</span><span class="o">-</span><span class="mi">1</span><span class="p">)):</span>
+                <span class="n">row</span><span class="p">[</span><span class="n">j</span><span class="p">]</span> <span class="o">=</span> <span class="n">rule_unpacked</span><span class="p">[</span><span class="nb">int</span><span class="o">.</span><span class="n">from_bytes</span><span class="p">(</span><span class="n">lastrow</span><span class="p">[</span><span class="n">j</span><span class="o">-</span><span class="mi">1</span><span class="p">:</span><span class="n">j</span><span class="o">+</span><span class="mi">2</span><span class="p">]</span><span class="o">.</span><span class="n">tobytes</span><span class="p">(),</span> <span class="s1">&#39;little&#39;</span><span class="p">)]</span>
+
+            <span class="c1"># The left and right endpoints of the last row need special</span>
+            <span class="c1"># attention because we don&#39;t have all three neighbors from</span>
+            <span class="c1"># the previous row.</span>
+            <span class="k">if</span> <span class="n">i</span> <span class="o">==</span> <span class="n">rows</span> <span class="o">-</span> <span class="mi">1</span><span class="p">:</span>
+                <span class="n">row</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="n">rule_unpacked</span><span class="p">[</span><span class="n">lastrow</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">*</span> <span class="mi">2</span> <span class="o">+</span> <span class="n">lastrow</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">*</span> <span class="mi">4</span><span class="p">]</span>
+                <span class="n">row</span><span class="p">[</span><span class="n">columns</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="n">rule_unpacked</span><span class="p">[</span><span class="n">lastrow</span><span class="p">[</span><span class="n">columns</span><span class="o">-</span><span class="mi">2</span><span class="p">]</span> <span class="o">+</span> <span class="n">lastrow</span><span class="p">[</span><span class="n">columns</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">*</span> <span class="mi">2</span><span class="p">]</span>
+
+            <span class="bp">self</span><span class="o">.</span><span class="n">_matrix</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">row</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">_generate_odd</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">rows</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_rows</span>
+        <span class="n">columns</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_columns</span>
+        <span class="n">rule_unpacked</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_rule_unpacked</span>
+
+        <span class="c1"># In order to compute the states of the middle (2n-1) cells on</span>
+        <span class="c1"># the n-th row, we need to start from the states of the middle</span>
+        <span class="c1"># (4n-3) cells on the first row, and step by step compute the</span>
+        <span class="c1"># middle (4n-3-2i) cells on the (i+1)-th row.</span>
+
+        <span class="c1"># Initial state, with a single 1 in the middle</span>
+        <span class="n">row</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_zeros</span><span class="p">(</span><span class="mi">4</span> <span class="o">*</span> <span class="n">rows</span> <span class="o">-</span> <span class="mi">3</span><span class="p">)</span>
+        <span class="n">row</span><span class="p">[</span><span class="mi">2</span><span class="o">*</span><span class="n">rows</span><span class="o">-</span><span class="mi">2</span><span class="p">]</span> <span class="o">=</span> <span class="mi">1</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_matrix</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">row</span><span class="p">[</span><span class="n">rows</span><span class="o">-</span><span class="mi">1</span><span class="p">:</span><span class="n">rows</span><span class="o">-</span><span class="mi">1</span><span class="o">+</span><span class="n">columns</span><span class="p">])</span>
+
+        <span class="c1"># Evolution</span>
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">rows</span><span class="p">):</span>
+            <span class="n">lastrow</span> <span class="o">=</span> <span class="n">row</span>
+            <span class="n">columns_to_compute</span> <span class="o">=</span> <span class="mi">4</span> <span class="o">*</span> <span class="n">rows</span> <span class="o">-</span> <span class="mi">3</span> <span class="o">-</span> <span class="mi">2</span> <span class="o">*</span> <span class="n">i</span>
+            <span class="n">row</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_zeros</span><span class="p">(</span><span class="n">columns_to_compute</span><span class="p">)</span>
+            <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">columns_to_compute</span><span class="p">):</span>
+                <span class="n">row</span><span class="p">[</span><span class="n">j</span><span class="p">]</span> <span class="o">=</span> <span class="n">rule_unpacked</span><span class="p">[</span><span class="nb">int</span><span class="o">.</span><span class="n">from_bytes</span><span class="p">(</span><span class="n">lastrow</span><span class="p">[</span><span class="n">j</span><span class="p">:</span><span class="n">j</span><span class="o">+</span><span class="mi">3</span><span class="p">]</span><span class="o">.</span><span class="n">tobytes</span><span class="p">(),</span> <span class="s1">&#39;little&#39;</span><span class="p">)]</span>
+
+            <span class="bp">self</span><span class="o">.</span><span class="n">_matrix</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">row</span><span class="p">[</span><span class="n">rows</span><span class="o">-</span><span class="mi">1</span><span class="o">-</span><span class="n">i</span><span class="p">:</span><span class="n">rows</span><span class="o">-</span><span class="mi">1</span><span class="o">-</span><span class="n">i</span><span class="o">+</span><span class="n">columns</span><span class="p">])</span></div>
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2017, Zhiming Wang.
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  
+
+    <script type="text/javascript">
+        var DOCUMENTATION_OPTIONS = {
+            URL_ROOT:'../../',
+            VERSION:'0.1',
+            COLLAPSE_INDEX:false,
+            FILE_SUFFIX:'.html',
+            HAS_SOURCE:  true
+        };
+    </script>
+      <script type="text/javascript" src="../../_static/jquery.js"></script>
+      <script type="text/javascript" src="../../_static/underscore.js"></script>
+      <script type="text/javascript" src="../../_static/doctools.js"></script>
+
+  
+
+  
+  
+    <script type="text/javascript" src="../../_static/js/theme.js"></script>
+  
+
+  
+  
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.StickyNav.enable();
+      });
+  </script>
+   
+
+</body>
+</html>

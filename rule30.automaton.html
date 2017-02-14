@@ -1,0 +1,367 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>rule30.automaton &mdash; rule30 0.1 documentation</title>
+  
+
+  
+  
+    <link rel="shortcut icon" href="_static/favicon.ico"/>
+  
+
+  
+
+  
+  
+    
+
+  
+
+  
+  
+    <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  
+
+  
+
+  
+        <link rel="index" title="Index"
+              href="genindex.html"/>
+        <link rel="search" title="Search" href="search.html"/>
+    <link rel="top" title="rule30 0.1 documentation" href="index.html"/>
+        <link rel="next" title="rule30.visualize" href="rule30.visualize.html"/>
+        <link rel="prev" title="rule30" href="index.html"/> 
+
+  
+  <script src="_static/js/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search">
+          
+
+          
+            <a href="index.html" class="icon icon-home"> rule30
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                0.1
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+                <ul class="current">
+<li class="toctree-l1 current"><a class="current reference internal" href="#"><code class="docutils literal"><span class="pre">rule30.automaton</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="rule30.visualize.html"><code class="docutils literal"><span class="pre">rule30.visualize</span></code></a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
+        <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+        <a href="index.html">rule30</a>
+      </nav>
+
+
+      
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          
+
+ 
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+  <ul class="wy-breadcrumbs">
+    <li><a href="index.html">Docs</a> &raquo;</li>
+      
+    <li><code class="docutils literal"><span class="pre">rule30.automaton</span></code></li>
+      <li class="wy-breadcrumbs-aside">
+        
+          
+            <a href="_sources/rule30.automaton.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="module-rule30.automaton">
+<span id="rule30-automaton"></span><h1><code class="docutils literal"><span class="pre">rule30.automaton</span></code><a class="headerlink" href="#module-rule30.automaton" title="Permalink to this headline">¶</a></h1>
+<dl class="class">
+<dt id="rule30.automaton.Automaton">
+<em class="property">class </em><code class="descclassname">rule30.automaton.</code><code class="descname">Automaton</code><span class="sig-paren">(</span><em>rows</em>, <em>rule=30</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/rule30/automaton.html#Automaton"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#rule30.automaton.Automaton" title="Permalink to this definition">¶</a></dt>
+<dd><p>An elementary cellular automaton with an initial state of a single 1.</p>
+<p>The number of rows, <cite>rows</cite>, is given at class instantiation, and the
+automaton is only simulated to that depth. Horizontally, we only
+keep the states of the 2 * <cite>rows</cite> - 1 cells centered around the
+initial 1.</p>
+<p>One can access the history matrix via <cite>matrix</cite> or as a numpy array
+via <cite>nparray</cite>, or as a printable string via <cite>string</cite>, or as an image
+via <cite>image</cite>.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>rows</strong> : int</p>
+<p><strong>rule</strong> : int, optional</p>
+<blockquote class="last">
+<div><p>The Wolfram code for the rule (in the range [0, 255]). See
+<a class="reference external" href="https://en.wikipedia.org/wiki/Wolfram_code">Wolfram code</a> on
+Wikipedia. Default is 30.</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+<dl class="attribute">
+<dt id="rule30.automaton.Automaton.rows">
+<code class="descname">rows</code><a class="headerlink" href="#rule30.automaton.Automaton.rows" title="Permalink to this definition">¶</a></dt>
+<dd><p>Number of rows in the history matrix.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">int</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="rule30.automaton.Automaton.columns">
+<code class="descname">columns</code><a class="headerlink" href="#rule30.automaton.Automaton.columns" title="Permalink to this definition">¶</a></dt>
+<dd><p>Number of columns in the history matrix.</p>
+<p>Always equals 2 * <cite>rows</cite> - 1.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">int</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="rule30.automaton.Automaton.rule">
+<code class="descname">rule</code><a class="headerlink" href="#rule30.automaton.Automaton.rule" title="Permalink to this definition">¶</a></dt>
+<dd><p>Wolfram code for the rule.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">int</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="rule30.automaton.Automaton.matrix">
+<code class="descname">matrix</code><a class="headerlink" href="#rule30.automaton.Automaton.matrix" title="Permalink to this definition">¶</a></dt>
+<dd><p>The history matrix.</p>
+<p>This is a list of <cite>rows</cite> rows, where each row is a bitarray of
+length <cite>columns</cite>. See <a class="reference external" href="https://pypi.python.org/pypi/bitarray">bitarray&#8217;s reference</a> for more details.</p>
+<p>This is the internal representation of the <cite>Automaton</cite> class.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">List[bitarray]</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="rule30.automaton.Automaton.string">
+<code class="descname">string</code><span class="sig-paren">(</span><em>zero='0'</em>, <em>one='1'</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/rule30/automaton.html#Automaton.string"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#rule30.automaton.Automaton.string" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns a printable string representation of the matrix.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>zero</strong> : str, optional</p>
+<blockquote>
+<div><p>The character to print for a cell of value 0. Default is &#8216;0&#8217;.</p>
+</div></blockquote>
+<p><strong>one</strong> : str, optional</p>
+<blockquote>
+<div><p>The character to print for a cell of value 1. Default is &#8216;1&#8217;.</p>
+</div></blockquote>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">str</p>
+</td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Examples</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">rule30</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="n">rule30</span><span class="o">.</span><span class="n">Automaton</span><span class="p">(</span><span class="mi">5</span><span class="p">,</span> <span class="n">rule</span><span class="o">=</span><span class="mi">30</span><span class="p">)</span><span class="o">.</span><span class="n">string</span><span class="p">())</span>
+<span class="go">000010000</span>
+<span class="go">000111000</span>
+<span class="go">001100100</span>
+<span class="go">011011110</span>
+<span class="go">110010001</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="method">
+<dt id="rule30.automaton.Automaton.nparray">
+<code class="descname">nparray</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/rule30/automaton.html#Automaton.nparray"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#rule30.automaton.Automaton.nparray" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns the matrix as a numpy array of dtype bool.</p>
+<p>Requires numpy.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">numpy.ndarray</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="rule30.automaton.Automaton.image">
+<code class="descname">image</code><span class="sig-paren">(</span><em>block_size=1</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/rule30/automaton.html#Automaton.image"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#rule30.automaton.Automaton.image" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns an image for the matrix.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>block_size</strong> : int, optional</p>
+<blockquote>
+<div><p>Size in pixels of each cell (drawn as a square). Default is 1.</p>
+</div></blockquote>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">PIL.Image.Image</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+
+
+           </div>
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="rule30.visualize.html" class="btn btn-neutral float-right" title="rule30.visualize" accesskey="n">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="index.html" class="btn btn-neutral" title="rule30" accesskey="p"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2017, Zhiming Wang.
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  
+
+    <script type="text/javascript">
+        var DOCUMENTATION_OPTIONS = {
+            URL_ROOT:'./',
+            VERSION:'0.1',
+            COLLAPSE_INDEX:false,
+            FILE_SUFFIX:'.html',
+            HAS_SOURCE:  true
+        };
+    </script>
+      <script type="text/javascript" src="_static/jquery.js"></script>
+      <script type="text/javascript" src="_static/underscore.js"></script>
+      <script type="text/javascript" src="_static/doctools.js"></script>
+
+  
+
+  
+  
+    <script type="text/javascript" src="_static/js/theme.js"></script>
+  
+
+  
+  
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.StickyNav.enable();
+      });
+  </script>
+   
+
+</body>
+</html>
