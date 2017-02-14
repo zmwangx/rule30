@@ -2,10 +2,14 @@
  rule30
 ========
 
-|Supported Python versions| |Docs| |License|
+|GitHub release| |PyPI version| |Supported Python versions| |Docs| |License|
 
 This project efficiently implements Stephen Wolfram's elementary cellular automata (Rule 30 being a notable example), specifically their single 1 histories. Histories can be generated in various matrix formats (including ``numpy.ndarray``) and exported as strings or images.
 
+.. |GitHub release| image:: https://img.shields.io/github/release/zmwangx/rule30.svg?maxAge=86400
+   :target: https://github.com/zmwangx/rule30/releases/latest
+.. |PyPI version| image:: https://img.shields.io/pypi/v/rule30.svg?maxAge=86400
+   :target: https://pypi.python.org/pypi/rule30
 .. |Supported Python versions| image:: https://img.shields.io/badge/python-3.3,3.4,3.5,3.6-blue.svg?maxAge=2592000
 .. |Docs| image:: https://img.shields.io/badge/docs-latest-green.svg?maxAge=2592000
    :target: https://rule30.zhimingwang.org
@@ -14,6 +18,17 @@ This project efficiently implements Stephen Wolfram's elementary cellular automa
 
 .. contents::
    :backlinks: top
+
+Installation
+------------
+
+To install from PyPI::
+
+  pip install rule30
+
+To install and develop from this repository::
+
+  ./setup.py develop
 
 API reference
 -------------
