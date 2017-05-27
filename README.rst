@@ -149,3 +149,5 @@ License
 Copyright (c) 2017 Zhiming Wang <zmwangx@gmail.com>
 
 This project is licensed under the MIT license. See ``COPYING`` for details.
+
+Images in the ``images`` directory are separately licensed under `CC0 1.0 Universal <https://creativecommons.org/publicdomain/zero/1.0/>`_.
